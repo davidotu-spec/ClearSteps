@@ -1,0 +1,5 @@
+{
+  "name": "ClearStep",
+  "description": "An error-proof task navigator that generates precision checklists with verification criteria to eliminate human error in complex processes.",
+  "requestFramePermissions": []
+}
