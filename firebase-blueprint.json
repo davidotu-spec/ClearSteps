@@ -1,0 +1,66 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Stores user profile and role information.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "The unique Firebase Auth ID." },
+        "email": { "type": "string", "format": "email", "description": "User's email address." },
+        "displayName": { "type": "string", "description": "User's display name." },
+        "photoURL": { "type": "string", "format": "uri", "description": "User's profile picture URL." },
+        "role": { "type": "string", "enum": ["admin", "user"], "description": "User's role in the system." },
+        "createdAt": { "type": "number", "description": "Timestamp when the user was created." },
+        "isPro": { "type": "boolean", "description": "Whether the user has a Pro subscription." },
+        "generationCount": { "type": "number", "description": "Number of protocols generated this month." },
+        "lastGenerationMonth": { "type": "string", "description": "Month of the last generation (YYYY-MM)." }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Checklist": {
+      "title": "Protocol Checklist",
+      "description": "Stores a generated step-by-step protocol.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique ID for the checklist." },
+        "goal": { "type": "string", "description": "The objective of the protocol." },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "title": { "type": "string" },
+              "description": { "type": "string" },
+              "verificationCriteria": { "type": "string" },
+              "isCompleted": { "type": "boolean" },
+              "criticality": { "type": "string", "enum": ["low", "medium", "high"] },
+              "evidence": { "type": "string", "description": "User provided evidence for verification." },
+              "verificationFeedback": { "type": "string", "description": "AI feedback on the evidence." },
+              "verificationStatus": { "type": "string", "enum": ["pending", "passed", "failed"] },
+              "completedBy": { "type": "string", "description": "UID of the user who completed the step." },
+              "completedAt": { "type": "number", "description": "Timestamp when the step was completed." }
+            }
+          }
+        },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "explanation": { "type": "string" },
+        "createdAt": { "type": "number" },
+        "createdBy": { "type": "string", "description": "UID of the user who created the protocol." },
+        "criticality": { "type": "string", "enum": ["low", "medium", "high"] },
+        "collaborators": { "type": "array", "items": { "type": "string" }, "description": "List of UIDs allowed to edit." }
+      },
+      "required": ["id", "goal", "steps", "createdAt", "createdBy", "criticality"]
+    }
+  },
+  "firestore": {
+    "/users/{uid}": {
+      "schema": "User",
+      "description": "User profile data."
+    },
+    "/checklists/{checklistId}": {
+      "schema": "Checklist",
+      "description": "Protocol checklist data."
+    }
+  }
+}
